@@ -55,3 +55,7 @@ The app lives in the menu bar. Click its icon, then **Open Companion** for the f
 - Services layer (`SimctlClient`, `ProcessManager`, `RescueService`, `PreviewPaths`, `ProfileStore`) isolates all side effects from the views.
 
 > Uses undocumented `simctl --set previews` behavior; may need adjusting across Xcode versions.
+
+## License
+
+[MIT](LICENSE)
