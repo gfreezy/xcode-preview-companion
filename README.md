@@ -4,6 +4,14 @@ A macOS menu bar app for managing the environment behind Xcode's SwiftUI Preview
 
 SwiftUI Previews for iOS / watchOS / tvOS run on a **separate CoreSimulator device set** (`xcrun simctl --set previews …`), isolated from the simulators you boot by hand. Existing tools (RocketSim, Control Room, SimPermissions) all operate on the default device set — so a permission you grant there never reaches your previews. Xcode Preview Companion targets that preview-only environment directly.
 
+## Screenshots
+
+| Devices | Permissions |
+| --- | --- |
+| ![Devices](docs/screenshots/devices.png) | ![Permissions](docs/screenshots/permissions.png) |
+| **Rescue** | **Files** |
+| ![Rescue](docs/screenshots/rescue.png) | ![Files](docs/screenshots/files.png) |
+
 ## Features
 
 - **Devices** — list the preview device set, see which are booted, shut down / delete individual devices, or delete them all.
