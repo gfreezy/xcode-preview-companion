@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version without leading v (e.g. 0.1.0). Defaults to project.yml.'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Install tools
+        run: brew install xcodegen create-dmg
+
+      - name: Determine version
+        id: ver
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            v="${GITHUB_REF_NAME#v}"
+          else
+            v="${{ github.event.inputs.version }}"
+          fi
+          if [ -z "$v" ]; then
+            v="$(grep MARKETING_VERSION project.yml | head -1 | sed 's/.*"\(.*\)".*/\1/')"
+          fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          echo "Release version: $v"
+
+      - name: Build, sign & package DMG
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          identity="$(./scripts/setup-self-signed.sh)"
+          echo "Signing with: $identity"
+          SIGN_IDENTITY="$identity" ./scripts/release.sh
+
+      - name: Checksums
+        run: |
+          cd dist
+          shasum -a 256 *.dmg | tee SHA256SUMS.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: XcodePreviewCompanion-${{ steps.ver.outputs.version }}
+          path: dist/*
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            dist/*.dmg dist/SHA256SUMS.txt \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes
