@@ -34,6 +34,14 @@ Download the latest `XcodePreviewCompanion-*.dmg` from the [Releases](https://gi
 
 The DMG is signed with a **self-signed certificate** (not an Apple Developer ID), so it is not notarized. On first launch macOS Gatekeeper will block it — right-click the app → **Open**, then confirm. This is only needed once. A stable self-signed identity (rather than a per-build ad-hoc signature) means privacy permissions you grant the app survive across updates.
 
+If right-click → Open still reports the app is "damaged" or can't be opened, strip the quarantine attribute Gatekeeper adds to downloaded files:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/XcodePreviewCompanion.app
+```
+
+(`-d` deletes the `com.apple.quarantine` attribute, `-r` applies it recursively to the whole bundle.) Then launch the app normally.
+
 ## Build
 
 ```sh
