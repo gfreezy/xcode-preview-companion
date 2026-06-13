@@ -1,5 +1,8 @@
 # Xcode Preview Companion
 
+[![CI](https://github.com/gfreezy/xcode-preview-companion/actions/workflows/ci.yml/badge.svg)](https://github.com/gfreezy/xcode-preview-companion/actions/workflows/ci.yml)
+[![Release](https://github.com/gfreezy/xcode-preview-companion/actions/workflows/release.yml/badge.svg)](https://github.com/gfreezy/xcode-preview-companion/actions/workflows/release.yml)
+
 A macOS menu bar app for managing the environment behind Xcode's SwiftUI Previews.
 
 SwiftUI Previews for iOS / watchOS / tvOS run on a **separate CoreSimulator device set** (`xcrun simctl --set previews …`), isolated from the simulators you boot by hand. Existing tools (RocketSim, Control Room, SimPermissions) all operate on the default device set — so a permission you grant there never reaches your previews. Xcode Preview Companion targets that preview-only environment directly.
@@ -24,6 +27,12 @@ SwiftUI Previews for iOS / watchOS / tvOS run on a **separate CoreSimulator devi
 - macOS 14+
 - Xcode installed (provides `simctl`)
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen) to generate the project (`brew install xcodegen`)
+
+## Install
+
+Download the latest `XcodePreviewCompanion-*.dmg` from the [Releases](https://github.com/gfreezy/xcode-preview-companion/releases) page, open it, and drag the app to `/Applications`.
+
+The DMG is signed with a **self-signed certificate** (not an Apple Developer ID), so it is not notarized. On first launch macOS Gatekeeper will block it — right-click the app → **Open**, then confirm. This is only needed once. A stable self-signed identity (rather than a per-build ad-hoc signature) means privacy permissions you grant the app survive across updates.
 
 ## Build
 

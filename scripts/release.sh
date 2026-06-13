@@ -84,7 +84,11 @@ create-dmg \
   --no-internet-enable \
   "$DMG" \
   "$STAGE" \
-  || true   # create-dmg returns non-zero when it can't set a custom volume icon (headless CI); the DMG is still produced.
+  || true   # create-dmg returns non-zero when it can't run the Finder prettify AppleScript (headless CI); the DMG is still produced.
+
+# create-dmg leaves its intermediate read-write image (rw.*.dmg) behind when the
+# prettify step fails headlessly — drop it so it isn't released or checksummed.
+rm -f "$DIST"/rw.*.dmg
 
 [ -f "$DMG" ] || { echo "error: DMG was not created at $DMG" >&2; exit 1; }
 
