@@ -43,9 +43,9 @@ jobs:
         env:
           VERSION: ${{ steps.ver.outputs.version }}
         run: |
-          identity="$(./scripts/setup-self-signed.sh)"
+          identity="$(bash ./scripts/setup-self-signed.sh)"
           echo "Signing with: $identity"
-          SIGN_IDENTITY="$identity" ./scripts/release.sh
+          SIGN_IDENTITY="$identity" bash ./scripts/release.sh
 
       - name: Checksums
         run: |
